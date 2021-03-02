@@ -338,3 +338,47 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/Assets/Scenes
+/Assets/Prefabs
+/Assets/NavMeshComponents/NavMeshComponents-master
+/Assets/Materials
+/Assets/BrokenVector/LowPolyTreePack
+/Assets/TerrainData_f0c79aef-4e90-4944-b0bd-102b702b2412.asset
+/Assets/TerrainData_e85f8af2-2a75-427e-9109-3bfdda8b4e8f.asset
+/Assets/TerrainData_d1d30ee8-6d74-447e-a2eb-a354b036913f.asset
+/Assets/TerrainData_c501e77b-8f83-4ada-b9ba-44ccdf760226.asset
+/Assets/TerrainData_94738486-8249-4901-bc64-2280f32dee2c.asset
+/Assets/TerrainData_75379580-81cb-4311-97d9-15ecc9300855.asset
+/Assets/TerrainData_73acec92-eef8-4567-b35d-93e53eac06ae.asset
+/Assets/TerrainData_589bdb6d-efb5-4630-acb1-0019890a2250.asset
+/Assets/TerrainData_56904e90-e9d9-4401-a325-66bb890aa7dd.asset
+/Assets/TerrainData_540816b2-60ff-4fea-a1eb-63b7d610d701.asset
+/Assets/TerrainData_3ee004b1-1dc3-43e4-9d68-7b25995cb9a6.asset
+/Assets/TerrainData_3b4a38a4-2965-415a-9116-abfdd3c763d6.asset
+/Assets/TerrainData_34aa0a16-36ae-46f5-9fc8-4c4bf5f5dbf7.asset
+/Assets/New Terrain.asset
+/Assets/New Terrain 6.asset
+/Assets/New Terrain 5.asset
+/Assets/New Terrain 4.asset
+/Assets/New Terrain 3.asset
+/Assets/New Terrain 2.asset
+/Assets/New Terrain 1.asset
+/UserSettings
+/Temp
+/ProjectSettings
+/Library
+/Tools.Editor.csproj
+/Tools.csproj
+/NavMeshComponentsTestsPlaymode.csproj
+/NavMeshComponentsTestsEditmode.csproj
+/NavMeshComponentsExamplesEditor.csproj
+/NavMeshComponentsExamples.csproj
+/NavMeshComponentsEditor.csproj
+/NavMeshComponents.csproj
+/MapMagic.VegetationStudioPro.Editor.csproj
+/MapMagic.VegetationStudioPro.csproj
+/MapMagic.Settings.csproj
+/MapMagic.Editor.csproj
+/MapMagic.csproj
+/Assembly-CSharp.csproj
+/Assembly-CSharp-Editor.csproj

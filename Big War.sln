@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{94212A10-8FAB-7A85-0808-DAB25B122A6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NavMeshComponentsExamples", "NavMeshComponentsExamples.csproj", "{593C91B9-4AF2-AFFD-1DA2-2086F8A5F504}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NavMeshComponentsTestsPlaymode", "NavMeshComponentsTestsPlaymode.csproj", "{79C47D11-F558-4808-847D-BD489B486044}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NavMeshComponents", "NavMeshComponents.csproj", "{867FB101-042B-C93C-1B6F-8968523A05D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NavMeshComponentsEditor", "NavMeshComponentsEditor.csproj", "{90A905FA-355B-4D5F-056C-62D08FBBA149}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NavMeshComponentsTestsEditmode", "NavMeshComponentsTestsEditmode.csproj", "{7793B03D-4908-B50A-8E82-8486E8088EAA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NavMeshComponentsExamplesEditor", "NavMeshComponentsExamplesEditor.csproj", "{56D35547-2EA7-1004-22DE-2C0B5C2BDF1F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7DA2752D-CA3C-42EA-8DCB-5243BD85FDC7}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{94212A10-8FAB-7A85-0808-DAB25B122A6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94212A10-8FAB-7A85-0808-DAB25B122A6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94212A10-8FAB-7A85-0808-DAB25B122A6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94212A10-8FAB-7A85-0808-DAB25B122A6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{593C91B9-4AF2-AFFD-1DA2-2086F8A5F504}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{593C91B9-4AF2-AFFD-1DA2-2086F8A5F504}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{593C91B9-4AF2-AFFD-1DA2-2086F8A5F504}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{593C91B9-4AF2-AFFD-1DA2-2086F8A5F504}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79C47D11-F558-4808-847D-BD489B486044}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79C47D11-F558-4808-847D-BD489B486044}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79C47D11-F558-4808-847D-BD489B486044}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79C47D11-F558-4808-847D-BD489B486044}.Release|Any CPU.Build.0 = Release|Any CPU
+		{867FB101-042B-C93C-1B6F-8968523A05D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{867FB101-042B-C93C-1B6F-8968523A05D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{867FB101-042B-C93C-1B6F-8968523A05D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{867FB101-042B-C93C-1B6F-8968523A05D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90A905FA-355B-4D5F-056C-62D08FBBA149}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90A905FA-355B-4D5F-056C-62D08FBBA149}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90A905FA-355B-4D5F-056C-62D08FBBA149}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90A905FA-355B-4D5F-056C-62D08FBBA149}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7793B03D-4908-B50A-8E82-8486E8088EAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7793B03D-4908-B50A-8E82-8486E8088EAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7793B03D-4908-B50A-8E82-8486E8088EAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7793B03D-4908-B50A-8E82-8486E8088EAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56D35547-2EA7-1004-22DE-2C0B5C2BDF1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56D35547-2EA7-1004-22DE-2C0B5C2BDF1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56D35547-2EA7-1004-22DE-2C0B5C2BDF1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56D35547-2EA7-1004-22DE-2C0B5C2BDF1F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
