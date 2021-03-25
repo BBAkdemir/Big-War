@@ -1,4 +1,4 @@
-# Big-War
+# RTS Game
 
 v0.1-alpha
 Oyun için yapılan özelliklerin tanıtımı niteliğinde bir alpha sürüm.
