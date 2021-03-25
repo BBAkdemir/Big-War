@@ -5,5 +5,5 @@ using UnityEngine;
 public class Ordu
 {
     public General General { get; set; }
-    public List<Birlik> Birlikler { get; set; }
+    public List<Birlik> Units { get; set; }
 }

@@ -5,58 +5,58 @@ using UnityEngine;
 
 public class AskerSavas : MonoBehaviour
 {
-    private ParentTakip AskerErisim;
-    private SphereCollider EtkiAlani;
-    private BirlikOzellik KomutanErisim;
-    public GameObject Asker;
-    private GameObject Komutan;
-    public GameObject Dusman;
-    private AskerSavas DusmanMi;
+    private ParentTakip SoldierAccess;
+    private SphereCollider EffectArea;
+    private BirlikOzellik CommanderAccess;
+    public GameObject Soldier;
+    private GameObject Commander;
+    public GameObject Enemy;
+    private AskerSavas EnemyIsTrue;
 
     Collider[] hitCollider;
 
     public int Id;
-    public string Ad;
-    public AskerTur BirlikTuru;
-    public float Saldiri;
-    public float Savunma;
-    public float Sok;
-    public float Hiz;
-    public int Sayi;
-    public float AskerCan;
-    public float Moral;
-    public float Guc;
-    public string GeneralAd;
-    public int Taraf;
-    public Dizilim AktifDizilim;
+    public string Name;
+    public AskerTur TroopType;
+    public float Attack;
+    public float Defense;
+    public float Shock;
+    public float Speed;
+    public int Count;
+    public float SoldierHealth;
+    public float Morale;
+    public float Power;
+    public string GeneralName;
+    public int Side;
+    public Dizilim ActiveFormation;
     void Start()
     {
-        AskerErisim = Asker.GetComponent<ParentTakip>();
-        EtkiAlani = Asker.GetComponent<SphereCollider>();
-        Komutan = AskerErisim.target.gameObject.transform.parent.gameObject;
-        KomutanErisim = Komutan.GetComponent<BirlikOzellik>();
+        SoldierAccess = Soldier.GetComponent<ParentTakip>();
+        EffectArea = Soldier.GetComponent<SphereCollider>();
+        Commander = SoldierAccess.target.gameObject.transform.parent.gameObject;
+        CommanderAccess = Commander.GetComponent<BirlikOzellik>();
 
-        Id = KomutanErisim.Id;
-        Ad = KomutanErisim.Ad;
-        BirlikTuru = KomutanErisim.BirlikTuru;
-        Saldiri = KomutanErisim.Saldiri;
-        Savunma = KomutanErisim.Savunma;
-        Sok = KomutanErisim.Sok;
-        Hiz = KomutanErisim.Hiz;
-        Sayi = KomutanErisim.Sayi;
-        AskerCan = KomutanErisim.AskerCan;
-        Moral = KomutanErisim.Moral;
-        Guc = KomutanErisim.Guc;
-        GeneralAd = KomutanErisim.GeneralAd;
-        Taraf = KomutanErisim.Taraf;
-        AktifDizilim = KomutanErisim.AktifDizilim;
+        Id = CommanderAccess.Id;
+        Name = CommanderAccess.Name;
+        TroopType = CommanderAccess.TroopType;
+        Attack = CommanderAccess.Attack;
+        Defense = CommanderAccess.Defense;
+        Shock = CommanderAccess.Shock;
+        Speed = CommanderAccess.Speed;
+        Count = CommanderAccess.Count;
+        SoldierHealth = CommanderAccess.SoldierHealth;
+        Morale = CommanderAccess.Morale;
+        Power = CommanderAccess.Power;
+        GeneralName = CommanderAccess.GeneralName;
+        Side = CommanderAccess.Side;
+        ActiveFormation = CommanderAccess.ActiveFormation;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Dustumu")
         {
-            transform.position = new Vector3(transform.position.x, AskerErisim.target.position.y, transform.position.z);
+            transform.position = new Vector3(transform.position.x, SoldierAccess.target.position.y, transform.position.z);
         }
     }
     void Update()
@@ -68,27 +68,25 @@ public class AskerSavas : MonoBehaviour
     }
     private void makeRaycast()
     {
-        float range = EtkiAlani.radius + 1.5f;
+        float range = EffectArea.radius + 1.5f;
         hitCollider = Physics.OverlapSphere(transform.position, range);
         foreach (var item in hitCollider)
         {
-            DusmanMi = item.gameObject.GetComponent<AskerSavas>();
-            if (DusmanMi != null && DusmanMi.Taraf != Taraf)
+            EnemyIsTrue = item.gameObject.GetComponent<AskerSavas>();
+            if (EnemyIsTrue != null && EnemyIsTrue.Side != Side)
             {
-                Dusman = item.gameObject;
-                DusmanMi.AskerCan -= Guc;
-                if (AskerCan <= 0)
+                Enemy = item.gameObject;
+                EnemyIsTrue.SoldierHealth -= Power;
+                if (SoldierHealth <= 0)
                 {
-                    KomutanErisim.yenidenDizil = true;
-                    KomutanErisim.Sayi -= 1;
-                    Debug.Log("asker öldü, sayi:" + KomutanErisim.Sayi);
-                    KomutanErisim.Moral -= 0.05f;
-                    Destroy(Asker);
-                    Destroy(AskerErisim.target.gameObject);
+                    CommanderAccess.ReFormation = true;
+                    CommanderAccess.Count -= 1;
+                    Debug.Log("asker öldü, sayi:" + CommanderAccess.Count);
+                    CommanderAccess.Morale-= 0.05f;
+                    Destroy(Soldier);
+                    Destroy(SoldierAccess.target.gameObject);
                 }
             }
         }
     }
-
-
 }

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 public enum AskerTur
 {
-    KomutaninBirligi = 0,
-    KilicliPiyade = 1,
-    MizrakliPiyade = 2,
-    MizrakliAtli = 3,
-    AtliOkcu = 4,
-    OkcuPiyade = 5
+    CommanderUnit = 0,
+    SwordInfantry = 1,
+    SpearInfantry = 2,
+    SpearHorseman = 3,
+    HorseArcher = 4,
+    ArcherInfantry = 5
 }
 

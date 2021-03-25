@@ -6,445 +6,430 @@ using UnityEngine;
 public class BolumOlustur : MonoBehaviour
 {
     public General general;
-    public Birlik birlik;
-    BirlikTuru birlikTuru;
-    public Durum durum;
-    public BolumTasarimi bolumTasarimi;
-    private BirlikOzellik birlikOzellik;
-    public OrduDiziliminiDüzenle dizilimler;
+    public Birlik Unit;
+    BirlikTuru UnitType;
+    public Durum status;
+    public BolumTasarimi levelDesign;
+    private BirlikOzellik UnitProperty;
+    public OrduDiziliminiDüzenle formations;
 
-    public List<General> Generaller;
-    public List<Ordu> Ordular;
-    public List<BirlikTuru> BirlikTurleri;
-    public List<Birlik> Birlikler;
-    public List<Durum> durumlar;
+    public List<General> Generals;
+    public List<Ordu> Armies;
+    public List<BirlikTuru> UnitTypes;
+    public List<Birlik> Units;
+    public List<Durum> situations;
 
     public Terrain Terrain;
-    private Vector3 TerrainKonum;
+    private Vector3 TerrainLocation;
 
-    public Transform KomutaninBirligiDogmaNoktasi1;
-    public Transform KomutaninBirligiDogmaNoktasi2;
-    public Transform KilicliPiyadeDogmaNoktasi1;
-    public Transform KilicliPiyadeDogmaNoktasi2;
-    public Transform MizrakliPiyadeDogmaNoktasi1;
-    public Transform MizrakliPiyadeDogmaNoktasi2;
-    public Transform MizrakliAtliDogmaNoktasi1;
-    public Transform MizrakliAtliDogmaNoktasi2;
-    public Transform AtliOkcuDogmaNoktasi1;
-    public Transform AtliOkcuDogmaNoktasi2;
-    public Transform OkcuPiyadeDogmaNoktasi1;
-    public Transform OkcuPiyadeDogmaNoktasi2;
+    public Transform CommanderUnitSpawnPoint1;
+    public Transform CommanderUnitSpawnPoint2;
+    public Transform SwordInfantrySpawnPoint1;
+    public Transform SwordInfantrySpawnPoint2;
+    public Transform SpearInfantrySpawnPoint1;
+    public Transform SpearInfantrySpawnPoint2;
+    public Transform SpearHorsemanSpawnPoint1;
+    public Transform SpearHorsemanSpawnPoint2;
+    public Transform HorseArcherSpawnPoint1;
+    public Transform HorseArcherSpawnPoint2;
+    public Transform ArcherInfantrySpawnPoint1;
+    public Transform ArcherInfantrySpawnPoint2;
 
-    public GameObject Komutan;
-    public GameObject Asker;
+    public GameObject Commander;
+    public GameObject Soldier;
     public GameObject Pivot;
-    public GameObject SecmeAlani;
-    private Transform takipEdilecek;
-    private ParentTakip takipEdilecekObje;
+    public GameObject selectionArea;
+    private Transform IsFollowed;
+    private ParentTakip IsFollowedObject;
 
-    public int KiliçliPiyadeSayiTaraf1;
-    public int MizrakliPiyadeSayiTaraf1;
-    public int MizrakliAtliSayiTaraf1;
-    public int AtliOkcuSayiTaraf1;
-    public int OkcuPiyadeSayiTaraf1;
-    public string komutanTaraf1;
-    public int KiliçliPiyadeSayiTaraf2;
-    public int MizrakliPiyadeSayiTaraf2;
-    public int MizrakliAtliSayiTaraf2;
-    public int AtliOkcuSayiTaraf2;
-    public int OkcuPiyadeSayiTaraf2;
-    public string komutanTaraf2;
+    public int SwordInfantryCountSide1;
+    public int SpearInfantryCountSide1;
+    public int SpearHorsemanCountSide1;
+    public int HorseArcherCountSide1;
+    public int ArcherInfantryCountSide1;
+    public string commanderSide1;
+    public int SwordInfantryCountSide2;
+    public int SpearInfantryCountSide2;
+    public int SpearHorsemanCountSide2;
+    public int HorseArcherCountSide2;
+    public int ArcherInfantryCountSide2;
+    public string commanderSide2;
 
-    private int artir1 = 0;
-    private int artir2 = 0;
-    private int artir3 = 0;
-    private int artir4 = 0;
-    private int artir5 = 0;
-    private int artir6 = 0;
+    private int increase1 = 0;
+    private int increase2 = 0;
+    private int increase3 = 0;
+    private int increase4 = 0;
+    private int increase5 = 0;
+    private int increase6 = 0;
     private int a = 0;
 
-    GameObject newKomutan;
-    public List<GameObject> AskerlerListesi;
-    public List<GameObject> AskerlerListesiYedek;
+    GameObject newCommander;
+    public List<GameObject> SoldiersList;
+    public List<GameObject> SoldiersListReserve;
 
-    public Material Taraf1;
-    public Material Taraf2;
+    public Material Side1;
+    public Material Side2;
     void Start()
     {
         #region Generalleri Oluşturma
         General general;
-        Generaller = new List<General>();
-        general = GeneralDondur(0001, "Berk", 10, 10, 10, 10);
-        Generaller.Add(general);
-        general = GeneralDondur(0001, "Mert", 8, 8, 8, 8);
-        Generaller.Add(general);
+        Generals = new List<General>();
+        general = GeneralReturn(0001, "Berk", 10, 10, 10, 10);
+        Generals.Add(general);
+        general = GeneralReturn(0001, "Mert", 8, 8, 8, 8);
+        Generals.Add(general);
         #endregion
 
-        #region Birlik Türü Oluşturma
-        BirlikTuru birlikTuru;
-        BirlikTurleri = new List<BirlikTuru>();
-        birlikTuru = BirlikTuruDondur(AskerTur.KomutaninBirligi, 200);
-        BirlikTurleri.Add(birlikTuru);
-        birlikTuru = BirlikTuruDondur(AskerTur.KilicliPiyade, 0);
-        BirlikTurleri.Add(birlikTuru);
-        birlikTuru = BirlikTuruDondur(AskerTur.MizrakliPiyade, 0);
-        BirlikTurleri.Add(birlikTuru);
-        birlikTuru = BirlikTuruDondur(AskerTur.MizrakliAtli, 50);
-        BirlikTurleri.Add(birlikTuru);
-        birlikTuru = BirlikTuruDondur(AskerTur.AtliOkcu, 200);
-        BirlikTurleri.Add(birlikTuru);
-        birlikTuru = BirlikTuruDondur(AskerTur.OkcuPiyade, 200);
-        BirlikTurleri.Add(birlikTuru);
+        #region Unit Türü Oluşturma
+        BirlikTuru UnitType;
+        UnitTypes = new List<BirlikTuru>();
+        UnitType = UnitTypeReturn(AskerTur.CommanderUnit, 200);
+        UnitTypes.Add(UnitType);
+        UnitType = UnitTypeReturn(AskerTur.SwordInfantry, 0);
+        UnitTypes.Add(UnitType);
+        UnitType = UnitTypeReturn(AskerTur.SpearInfantry, 0);
+        UnitTypes.Add(UnitType);
+        UnitType = UnitTypeReturn(AskerTur.SpearHorseman, 50);
+        UnitTypes.Add(UnitType);
+        UnitType = UnitTypeReturn(AskerTur.HorseArcher, 200);
+        UnitTypes.Add(UnitType);
+        UnitType = UnitTypeReturn(AskerTur.ArcherInfantry, 200);
+        UnitTypes.Add(UnitType);
         #endregion
 
         #region Birlik Oluşturma
-        birlikTuru = new BirlikTuru();
-        Birlikler = new List<Birlik>();
-        Birlik birlik;
-        dizilimler = new OrduDiziliminiDüzenle();
+        UnitType = new BirlikTuru();
+        Units = new List<Birlik>();
+        Birlik Unit;
+        formations = new OrduDiziliminiDüzenle();
 
-        birlik = BirlikDondur(0001, "Komutanın Birliği", TurBelirle(AskerTur.KomutaninBirligi), 8, 5, 5, 4, 100, 100, 5, dizilimler.dizilimListesi[0]);
-        Birlikler.Add(birlik);
+        Unit = UnitReturn(0001, "CommanderUnit", SetType(AskerTur.CommanderUnit), 8, 5, 5, 4, 100, 100, 5, formations.formationList[0]);
+        Units.Add(Unit);
 
-        birlik = BirlikDondur(0002, "Kılıçlı Piyade Birlik", TurBelirle(AskerTur.KilicliPiyade), 5, 5, 2, 2, 100, 100, 3, dizilimler.dizilimListesi[0]);
-        Birlikler.Add(birlik);
+        Unit = UnitReturn(0002, "SwordInfantryUnit", SetType(AskerTur.SwordInfantry), 5, 5, 2, 2, 100, 100, 3, formations.formationList[0]);
+        Units.Add(Unit);
 
-        birlik = BirlikDondur(0003, "Mızraklı Piyade Birlik", TurBelirle(AskerTur.MizrakliPiyade), 5, 5, 3, 2, 100, 100, 3, dizilimler.dizilimListesi[0]);
-        Birlikler.Add(birlik);
+        Unit = UnitReturn(0003, "SpearInfantryUnit", SetType(AskerTur.SpearInfantry), 5, 5, 3, 2, 100, 100, 3, formations.formationList[0]);
+        Units.Add(Unit);
 
-        birlik = BirlikDondur(0004, "Mızraklı Atlı Birlik", TurBelirle(AskerTur.MizrakliAtli), 7, 4, 4, 4, 64, 100, 3, dizilimler.dizilimListesi[0]);
-        Birlikler.Add(birlik);
+        Unit = UnitReturn(0004, "SpearHorsemanUnit", SetType(AskerTur.SpearHorseman), 7, 4, 4, 4, 64, 100, 3, formations.formationList[0]);
+        Units.Add(Unit);
 
-        birlik = BirlikDondur(0005, "Atlı Okçu Birlik", TurBelirle(AskerTur.AtliOkcu), 3, 3, 1, 4, 64, 100, 3, dizilimler.dizilimListesi[0]);
-        Birlikler.Add(birlik);
+        Unit = UnitReturn(0005, "HorseArcherUnit", SetType(AskerTur.HorseArcher), 3, 3, 1, 4, 64, 100, 3, formations.formationList[0]);
+        Units.Add(Unit);
 
-        birlik = BirlikDondur(0006, "Okçu Piyade Birlik", TurBelirle(AskerTur.OkcuPiyade), 3, 3, 1, 2, 100, 100, 3, dizilimler.dizilimListesi[0]);
-        Birlikler.Add(birlik);
+        Unit = UnitReturn(0006, "ArcherInfantryUnit", SetType(AskerTur.ArcherInfantry), 3, 3, 1, 2, 100, 100, 3, formations.formationList[0]);
+        Units.Add(Unit);
         #endregion
 
         #region Ordu Oluşturma
         general = new General();
-        Ordular = new List<Ordu>();
-        Ordu ordu;
+        Armies = new List<Ordu>();
+        Ordu army;
 
-        KiliçliPiyadeSayiTaraf1 = 1;
-        MizrakliPiyadeSayiTaraf1 = 2;
-        MizrakliAtliSayiTaraf1 = 3;
-        AtliOkcuSayiTaraf1 = 1;
-        OkcuPiyadeSayiTaraf1 = 2;
-        komutanTaraf1 = "Berk";
-        KiliçliPiyadeSayiTaraf2 = 1;
-        MizrakliPiyadeSayiTaraf2 = 2;
-        MizrakliAtliSayiTaraf2 = 3;
-        AtliOkcuSayiTaraf2 = 1;
-        OkcuPiyadeSayiTaraf2 = 2;
-        komutanTaraf2 = "Mert";
-        
-        ordu = OrduDondur(GeneralBelirle(komutanTaraf1), birlikDoldur(KiliçliPiyadeSayiTaraf1, MizrakliPiyadeSayiTaraf1, MizrakliAtliSayiTaraf1, AtliOkcuSayiTaraf1, OkcuPiyadeSayiTaraf1));
-        Ordular.Add(ordu);;
-       
-        ordu = OrduDondur(GeneralBelirle(komutanTaraf2), birlikDoldur(KiliçliPiyadeSayiTaraf2, MizrakliPiyadeSayiTaraf2, MizrakliAtliSayiTaraf2, AtliOkcuSayiTaraf2, OkcuPiyadeSayiTaraf2));
-        Ordular.Add(ordu);
+        army = ArmyReturn(GeneralDetermine(commanderSide1), UnitFill(SwordInfantryCountSide1, SpearInfantryCountSide1, SpearHorsemanCountSide1, HorseArcherCountSide1, ArcherInfantryCountSide1, Units));
+        Armies.Add(army); ;
+
+        army = ArmyReturn(GeneralDetermine(commanderSide2), UnitFill(SwordInfantryCountSide2, SpearInfantryCountSide2, SpearHorsemanCountSide2, HorseArcherCountSide2, ArcherInfantryCountSide2, Units));
+        Armies.Add(army);
         #endregion
 
         #region Ordu Taraflarını Oluşturma
-        Durum durum;
-        durumlar = new List<Durum>();
-        durum = durumDondur(Ordular[0], 1);
-        durumlar.Add(durum);
-        durum = durumDondur(Ordular[1], 2);
-        durumlar.Add(durum);
+        Durum status;
+        situations = new List<Durum>();
+        status = statusReturn(Armies[0], 1);
+        situations.Add(status);
+        status = statusReturn(Armies[1], 2);
+        situations.Add(status);
         # endregion
 
         #region Bölüm Tasarımı Oluşturma
-        BolumTasarimi bolumTasarimi;
-        bolumTasarimi = BolumTasarimiDondur(Ordular, durumlar, 150);
+        BolumTasarimi levelDesign;
+        levelDesign = LevelDesignReturn(Armies, situations, 150);
         #endregion
 
         #region Orduları Getir
-        foreach (var Ordu in bolumTasarimi.Ordu)
+        foreach (var Army in levelDesign.Army)
         {
-            artir1 = 0;
-            artir2 = 0;
-            artir3 = 0;
-            artir4 = 0;
-            artir5 = 0;
-            artir6 = 0;
-            foreach (var Birlik in Ordu.Birlikler)
+            increase1 = 0;
+            increase2 = 0;
+            increase3 = 0;
+            increase4 = 0;
+            increase5 = 0;
+            increase6 = 0;
+            foreach (var unit in Army.Units)
             {
-                if (Birlik.BirlikTuru.Adi == AskerTur.KomutaninBirligi && Ordu.General.Ad == "Berk")
+                if (unit.UnitType.Name == AskerTur.CommanderUnit && Army.General.Name == "Berk")
                 {
-                    AskerlerListesiYedek = new List<GameObject>();
-                    AskerlerListesiYedek = OrduyuOlustur(KomutaninBirligiDogmaNoktasi1.transform.position, artir1, Birlik.Sayi, 1);
-                    BirlikOzellikAt(Birlik.Id, Birlik.Ad, Birlik.Saldiri, Birlik.Savunma, Birlik.Sok, Birlik.Hiz, Birlik.Sayi, Birlik.AskerCan, Birlik.Moral, GucHesapla(Birlik), Birlik.BirlikTuru.Adi, Ordu.General.Ad, Birlik.AktifDizilim, 1, AskerlerListesiYedek);
-                    artir1 += 1;
+                    SoldiersListReserve = new List<GameObject>();
+                    SoldiersListReserve = ArmyCreate(CommanderUnitSpawnPoint1.transform.position, increase1, unit.Count, 1);
+                    AssignUnitAttributes(unit.Id, unit.Name, unit.Attack, unit.Defense, unit.Shock, unit.Speed, unit.Count, unit.SoldierHealth, unit.Morale, PowerCalculate(unit), unit.UnitType.Name, Army.General.Name, unit.ActiveFormation, 1, SoldiersListReserve);
+                    increase1 += 1;
                     a += 1;
                 }
-                if (Birlik.BirlikTuru.Adi == AskerTur.KomutaninBirligi && Ordu.General.Ad == "Mert")
+                if (unit.UnitType.Name == AskerTur.CommanderUnit && Army.General.Name == "Mert")
                 {
-                    AskerlerListesiYedek = new List<GameObject>();
-                    AskerlerListesiYedek = OrduyuOlustur(KomutaninBirligiDogmaNoktasi2.transform.position, artir1, Birlik.Sayi, 2);
+                    SoldiersListReserve = new List<GameObject>();
+                    SoldiersListReserve = ArmyCreate(CommanderUnitSpawnPoint2.transform.position, increase1, unit.Count, 2);
 
-                    BirlikOzellikAt(Birlik.Id, Birlik.Ad, Birlik.Saldiri, Birlik.Savunma, Birlik.Sok, Birlik.Hiz, Birlik.Sayi, Birlik.AskerCan, Birlik.Moral, GucHesapla(Birlik), Birlik.BirlikTuru.Adi, Ordu.General.Ad, Birlik.AktifDizilim, 2, AskerlerListesiYedek);
-                    artir1 += 1;
+                    AssignUnitAttributes(unit.Id, unit.Name, unit.Attack, unit.Defense, unit.Shock, unit.Speed, unit.Count, unit.SoldierHealth, unit.Morale, PowerCalculate(unit), unit.UnitType.Name, Army.General.Name, unit.ActiveFormation, 2, SoldiersListReserve);
+                    increase1 += 1;
                     a += 1;
                 }
-                if (Birlik.BirlikTuru.Adi == AskerTur.KilicliPiyade && Ordu.General.Ad == "Berk")
+                if (unit.UnitType.Name == AskerTur.SwordInfantry && Army.General.Name == "Berk")
                 {
-                    AskerlerListesiYedek = new List<GameObject>();
-                    AskerlerListesiYedek = OrduyuOlustur(KilicliPiyadeDogmaNoktasi1.transform.position, artir2, Birlik.Sayi, 1);
-                    BirlikOzellikAt(Birlik.Id, Birlik.Ad, Birlik.Saldiri, Birlik.Savunma, Birlik.Sok, Birlik.Hiz, Birlik.Sayi, Birlik.AskerCan, Birlik.Moral, GucHesapla(Birlik), Birlik.BirlikTuru.Adi, Ordu.General.Ad, Birlik.AktifDizilim, 1, AskerlerListesiYedek);
-                    artir2 += 1;
+                    SoldiersListReserve = new List<GameObject>();
+                    SoldiersListReserve = ArmyCreate(SwordInfantrySpawnPoint1.transform.position, increase2, unit.Count, 1);
+                    AssignUnitAttributes(unit.Id, unit.Name, unit.Attack, unit.Defense, unit.Shock, unit.Speed, unit.Count, unit.SoldierHealth, unit.Morale, PowerCalculate(unit), unit.UnitType.Name, Army.General.Name, unit.ActiveFormation, 1, SoldiersListReserve);
+                    increase2 += 1;
                     a += 1;
                 }
-                if (Birlik.BirlikTuru.Adi == AskerTur.KilicliPiyade && Ordu.General.Ad == "Mert")
+                if (unit.UnitType.Name == AskerTur.SwordInfantry && Army.General.Name == "Mert")
                 {
-                    AskerlerListesiYedek = new List<GameObject>();
-                    AskerlerListesiYedek = OrduyuOlustur(KilicliPiyadeDogmaNoktasi2.transform.position, artir2, Birlik.Sayi, 2);
-                    BirlikOzellikAt(Birlik.Id, Birlik.Ad, Birlik.Saldiri, Birlik.Savunma, Birlik.Sok, Birlik.Hiz, Birlik.Sayi, Birlik.AskerCan, Birlik.Moral, GucHesapla(Birlik), Birlik.BirlikTuru.Adi, Ordu.General.Ad, Birlik.AktifDizilim, 2, AskerlerListesiYedek);
-                    artir2 += 1;
+                    SoldiersListReserve = new List<GameObject>();
+                    SoldiersListReserve = ArmyCreate(SwordInfantrySpawnPoint2.transform.position, increase2, unit.Count, 2);
+                    AssignUnitAttributes(unit.Id, unit.Name, unit.Attack, unit.Defense, unit.Shock, unit.Speed, unit.Count, unit.SoldierHealth, unit.Morale, PowerCalculate(unit), unit.UnitType.Name, Army.General.Name, unit.ActiveFormation, 2, SoldiersListReserve);
+                    increase2 += 1;
                     a += 1;
                 }
-                if (Birlik.BirlikTuru.Adi == AskerTur.MizrakliPiyade && Ordu.General.Ad == "Berk")
+                if (unit.UnitType.Name == AskerTur.SpearInfantry && Army.General.Name == "Berk")
                 {
-                    AskerlerListesiYedek = new List<GameObject>();
-                    AskerlerListesiYedek = OrduyuOlustur(MizrakliPiyadeDogmaNoktasi1.transform.position, artir3, Birlik.Sayi, 1);
-                    BirlikOzellikAt(Birlik.Id, Birlik.Ad, Birlik.Saldiri, Birlik.Savunma, Birlik.Sok, Birlik.Hiz, Birlik.Sayi, Birlik.AskerCan, Birlik.Moral, GucHesapla(Birlik), Birlik.BirlikTuru.Adi, Ordu.General.Ad, Birlik.AktifDizilim, 1, AskerlerListesiYedek);
-                    artir3 += 1;
+                    SoldiersListReserve = new List<GameObject>();
+                    SoldiersListReserve = ArmyCreate(SpearInfantrySpawnPoint1.transform.position, increase3, unit.Count, 1);
+                    AssignUnitAttributes(unit.Id, unit.Name, unit.Attack, unit.Defense, unit.Shock, unit.Speed, unit.Count, unit.SoldierHealth, unit.Morale, PowerCalculate(unit), unit.UnitType.Name, Army.General.Name, unit.ActiveFormation, 1, SoldiersListReserve);
+                    increase3 += 1;
                     a += 1;
                 }
-                if (Birlik.BirlikTuru.Adi == AskerTur.MizrakliPiyade && Ordu.General.Ad == "Mert")
+                if (unit.UnitType.Name == AskerTur.SpearInfantry && Army.General.Name == "Mert")
                 {
-                    AskerlerListesiYedek = new List<GameObject>();
-                    AskerlerListesiYedek = OrduyuOlustur(MizrakliPiyadeDogmaNoktasi2.transform.position, artir3, Birlik.Sayi, 2);
-                    BirlikOzellikAt(Birlik.Id, Birlik.Ad, Birlik.Saldiri, Birlik.Savunma, Birlik.Sok, Birlik.Hiz, Birlik.Sayi, Birlik.AskerCan, Birlik.Moral, GucHesapla(Birlik), Birlik.BirlikTuru.Adi, Ordu.General.Ad, Birlik.AktifDizilim, 2, AskerlerListesiYedek);
-                    artir3 += 1;
+                    SoldiersListReserve = new List<GameObject>();
+                    SoldiersListReserve = ArmyCreate(SpearInfantrySpawnPoint2.transform.position, increase3, unit.Count, 2);
+                    AssignUnitAttributes(unit.Id, unit.Name, unit.Attack, unit.Defense, unit.Shock, unit.Speed, unit.Count, unit.SoldierHealth, unit.Morale, PowerCalculate(unit), unit.UnitType.Name, Army.General.Name, unit.ActiveFormation, 2, SoldiersListReserve);
+                    increase3 += 1;
                     a += 1;
                 }
-                if (Birlik.BirlikTuru.Adi == AskerTur.MizrakliAtli && Ordu.General.Ad == "Berk")
+                if (unit.UnitType.Name == AskerTur.SpearHorseman && Army.General.Name == "Berk")
                 {
-                    AskerlerListesiYedek = new List<GameObject>();
-                    AskerlerListesiYedek = OrduyuOlustur(MizrakliAtliDogmaNoktasi1.transform.position, artir4, Birlik.Sayi, 1);
-                    BirlikOzellikAt(Birlik.Id, Birlik.Ad, Birlik.Saldiri, Birlik.Savunma, Birlik.Sok, Birlik.Hiz, Birlik.Sayi, Birlik.AskerCan, Birlik.Moral, GucHesapla(Birlik), Birlik.BirlikTuru.Adi, Ordu.General.Ad, Birlik.AktifDizilim, 1, AskerlerListesiYedek);
-                    artir4 += 1;
+                    SoldiersListReserve = new List<GameObject>();
+                    SoldiersListReserve = ArmyCreate(SpearHorsemanSpawnPoint1.transform.position, increase4, unit.Count, 1);
+                    AssignUnitAttributes(unit.Id, unit.Name, unit.Attack, unit.Defense, unit.Shock, unit.Speed, unit.Count, unit.SoldierHealth, unit.Morale, PowerCalculate(unit), unit.UnitType.Name, Army.General.Name, unit.ActiveFormation, 1, SoldiersListReserve);
+                    increase4 += 1;
                     a += 1;
                 }
-                if (Birlik.BirlikTuru.Adi == AskerTur.MizrakliAtli && Ordu.General.Ad == "Mert")
+                if (unit.UnitType.Name == AskerTur.SpearHorseman && Army.General.Name == "Mert")
                 {
-                    AskerlerListesiYedek = new List<GameObject>();
-                    AskerlerListesiYedek = OrduyuOlustur(MizrakliAtliDogmaNoktasi2.transform.position, artir4, Birlik.Sayi, 2);
-                    BirlikOzellikAt(Birlik.Id, Birlik.Ad, Birlik.Saldiri, Birlik.Savunma, Birlik.Sok, Birlik.Hiz, Birlik.Sayi, Birlik.AskerCan, Birlik.Moral, GucHesapla(Birlik), Birlik.BirlikTuru.Adi, Ordu.General.Ad, Birlik.AktifDizilim, 2, AskerlerListesiYedek);
-                    artir4 += 1;
+                    SoldiersListReserve = new List<GameObject>();
+                    SoldiersListReserve = ArmyCreate(SpearHorsemanSpawnPoint2.transform.position, increase4, unit.Count, 2);
+                    AssignUnitAttributes(unit.Id, unit.Name, unit.Attack, unit.Defense, unit.Shock, unit.Speed, unit.Count, unit.SoldierHealth, unit.Morale, PowerCalculate(unit), unit.UnitType.Name, Army.General.Name, unit.ActiveFormation, 2, SoldiersListReserve);
+                    increase4 += 1;
                     a += 1;
                 }
-                if (Birlik.BirlikTuru.Adi == AskerTur.AtliOkcu && Ordu.General.Ad == "Berk")
+                if (unit.UnitType.Name == AskerTur.HorseArcher && Army.General.Name == "Berk")
                 {
-                    AskerlerListesiYedek = new List<GameObject>();
-                    AskerlerListesiYedek = OrduyuOlustur(AtliOkcuDogmaNoktasi1.transform.position, artir5, Birlik.Sayi, 1);
-                    BirlikOzellikAt(Birlik.Id, Birlik.Ad, Birlik.Saldiri, Birlik.Savunma, Birlik.Sok, Birlik.Hiz, Birlik.Sayi, Birlik.AskerCan, Birlik.Moral, GucHesapla(Birlik), Birlik.BirlikTuru.Adi, Ordu.General.Ad, Birlik.AktifDizilim, 1, AskerlerListesiYedek);
-                    artir5 += 1;
+                    SoldiersListReserve = new List<GameObject>();
+                    SoldiersListReserve = ArmyCreate(HorseArcherSpawnPoint1.transform.position, increase5, unit.Count, 1);
+                    AssignUnitAttributes(unit.Id, unit.Name, unit.Attack, unit.Defense, unit.Shock, unit.Speed, unit.Count, unit.SoldierHealth, unit.Morale, PowerCalculate(unit), unit.UnitType.Name, Army.General.Name, unit.ActiveFormation, 1, SoldiersListReserve);
+                    increase5 += 1;
                     a += 1;
                 }
-                if (Birlik.BirlikTuru.Adi == AskerTur.AtliOkcu && Ordu.General.Ad == "Mert")
+                if (unit.UnitType.Name == AskerTur.HorseArcher && Army.General.Name == "Mert")
                 {
-                    AskerlerListesiYedek = new List<GameObject>();
-                    AskerlerListesiYedek = OrduyuOlustur(AtliOkcuDogmaNoktasi2.transform.position, artir5, Birlik.Sayi, 2);
-                    BirlikOzellikAt(Birlik.Id, Birlik.Ad, Birlik.Saldiri, Birlik.Savunma, Birlik.Sok, Birlik.Hiz, Birlik.Sayi, Birlik.AskerCan, Birlik.Moral, GucHesapla(Birlik), Birlik.BirlikTuru.Adi, Ordu.General.Ad, Birlik.AktifDizilim, 2, AskerlerListesiYedek);
-                    artir5 += 1;
+                    SoldiersListReserve = new List<GameObject>();
+                    SoldiersListReserve = ArmyCreate(HorseArcherSpawnPoint2.transform.position, increase5, unit.Count, 2);
+                    AssignUnitAttributes(unit.Id, unit.Name, unit.Attack, unit.Defense, unit.Shock, unit.Speed, unit.Count, unit.SoldierHealth, unit.Morale, PowerCalculate(unit), unit.UnitType.Name, Army.General.Name, unit.ActiveFormation, 2, SoldiersListReserve);
+                    increase5 += 1;
                     a += 1;
                 }
-                if (Birlik.BirlikTuru.Adi == AskerTur.OkcuPiyade && Ordu.General.Ad == "Berk")
+                if (unit.UnitType.Name == AskerTur.ArcherInfantry && Army.General.Name == "Berk")
                 {
-                    AskerlerListesiYedek = new List<GameObject>();
-                    AskerlerListesiYedek = OrduyuOlustur(OkcuPiyadeDogmaNoktasi1.transform.position, artir6, Birlik.Sayi, 1);
-                    BirlikOzellikAt(Birlik.Id, Birlik.Ad, Birlik.Saldiri, Birlik.Savunma, Birlik.Sok, Birlik.Hiz, Birlik.Sayi, Birlik.AskerCan, Birlik.Moral, GucHesapla(Birlik), Birlik.BirlikTuru.Adi, Ordu.General.Ad, Birlik.AktifDizilim, 1, AskerlerListesiYedek);
-                    artir6 += 1;
+                    SoldiersListReserve = new List<GameObject>();
+                    SoldiersListReserve = ArmyCreate(ArcherInfantrySpawnPoint1.transform.position, increase6, unit.Count, 1);
+                    AssignUnitAttributes(unit.Id, unit.Name, unit.Attack, unit.Defense, unit.Shock, unit.Speed, unit.Count, unit.SoldierHealth, unit.Morale, PowerCalculate(unit), unit.UnitType.Name, Army.General.Name, unit.ActiveFormation, 1, SoldiersListReserve);
+                    increase6 += 1;
                     a += 1;
                 }
-                if (Birlik.BirlikTuru.Adi == AskerTur.OkcuPiyade && Ordu.General.Ad == "Mert")
+                if (unit.UnitType.Name == AskerTur.ArcherInfantry && Army.General.Name == "Mert")
                 {
-                    AskerlerListesiYedek = new List<GameObject>();
-                    AskerlerListesiYedek = OrduyuOlustur(OkcuPiyadeDogmaNoktasi2.transform.position, artir6, Birlik.Sayi, 2);
-                    BirlikOzellikAt(Birlik.Id, Birlik.Ad, Birlik.Saldiri, Birlik.Savunma, Birlik.Sok, Birlik.Hiz, Birlik.Sayi, Birlik.AskerCan, Birlik.Moral, GucHesapla(Birlik), Birlik.BirlikTuru.Adi, Ordu.General.Ad, Birlik.AktifDizilim, 2, AskerlerListesiYedek);
-                    artir6 += 1;
+                    SoldiersListReserve = new List<GameObject>();
+                    SoldiersListReserve = ArmyCreate(ArcherInfantrySpawnPoint2.transform.position, increase6, unit.Count, 2);
+                    AssignUnitAttributes(unit.Id, unit.Name, unit.Attack, unit.Defense, unit.Shock, unit.Speed, unit.Count, unit.SoldierHealth, unit.Morale, PowerCalculate(unit), unit.UnitType.Name, Army.General.Name, unit.ActiveFormation, 2, SoldiersListReserve);
+                    increase6 += 1;
                     a += 1;
                 }
             }
         }
         #endregion
     }
-    public void BirlikOzellikAt(int Id, string Ad, float Saldiri, float Savunma, float Sok, float Hiz, int Sayi, float AskerCan, float Moral, float Guc, AskerTur BirlikTuru, string GeneralAd, Dizilim AktifDizilim, int taraf, List<GameObject> Askerler)
+    public void AssignUnitAttributes(int Id, string Name, float Attack, float Defense, float Shock, float Speed, int Count, float SoldierHealth, float Morale, float Power, AskerTur TroopType, string GeneralName, Dizilim ActiveFormation, int Side, List<GameObject> Soldiers)
     {
-        birlikOzellik = GameObject.Find(newKomutan.name).GetComponent<BirlikOzellik>();
-        birlikOzellik.Id = Id;
-        birlikOzellik.Ad = Ad;
-        birlikOzellik.Saldiri = Saldiri;
-        birlikOzellik.Savunma = Savunma;
-        birlikOzellik.Sok = Sok;
-        birlikOzellik.Hiz = Hiz;
-        birlikOzellik.Sayi = Sayi;
-        birlikOzellik.AskerCan = AskerCan;
-        birlikOzellik.Moral = Moral;
-        birlikOzellik.Guc = Guc;
-        birlikOzellik.BirlikTuru = BirlikTuru;
-        birlikOzellik.GeneralAd = GeneralAd;
-        birlikOzellik.AktifDizilim = AktifDizilim;
-        birlikOzellik.Taraf = taraf;
-        birlikOzellik.Askerler = Askerler;
+        UnitProperty = GameObject.Find(newCommander.name).GetComponent<BirlikOzellik>();
+        UnitProperty.Id = Id;
+        UnitProperty.Name = Name;
+        UnitProperty.Attack = Attack;
+        UnitProperty.Defense = Defense;
+        UnitProperty.Shock = Shock;
+        UnitProperty.Speed = Speed;
+        UnitProperty.Count = Count;
+        UnitProperty.SoldierHealth = SoldierHealth;
+        UnitProperty.Morale = Morale;
+        UnitProperty.Power = Power;
+        UnitProperty.TroopType = TroopType;
+        UnitProperty.GeneralName = GeneralName;
+        UnitProperty.ActiveFormation = ActiveFormation;
+        UnitProperty.Side = Side;
+        UnitProperty.Soldiers = Soldiers;
     }
-    public List<Birlik> birlikDoldur(int KiliçliPiyadeSayi, int MizrakliPiyadeSayi, int MizrakliAtliSayi, int AtliOkcuSayi, int OkcuPiyadeSayi)
+    public List<Birlik> UnitFill(int SwordInfantryCount, int SpearInfantryCount, int SpearHorsemanCount, int HorseArcherCount, int ArcherInfantryCount, List<Birlik> Units)
     {
-        var birlikler = new List<Birlik>();
-        foreach (var item in Birlikler)
+        var UntiReserve = new List<Birlik>();
+        foreach (var item in Units)
         {
-            if (item.Ad == "Komutanın Birliği")
+            if (item.Name == "CommanderUnit")
             {
-                birlikler.Add(item);
+                UntiReserve.Add(item);
             }
-            if (item.Ad == "Kılıçlı Piyade Birlik")
+            if (item.Name == "SwordInfantryUnit")
             {
-                for (int i = 0; i < KiliçliPiyadeSayi; i++)
+                for (int i = 0; i < SwordInfantryCount; i++)
                 {
-                    birlikler.Add(item);
+                    UntiReserve.Add(item);
                 }
             }
-            if (item.Ad == "Mızraklı Piyade Birlik")
+            if (item.Name == "SpearInfantryUnit")
             {
-                for (int i = 0; i < MizrakliPiyadeSayi; i++)
+                for (int i = 0; i < SpearInfantryCount; i++)
                 {
-                    birlikler.Add(item);
+                    UntiReserve.Add(item);
                 }
             }
-            if (item.Ad == "Mızraklı Atlı Birlik")
+            if (item.Name == "SpearHorsemanUnit")
             {
-                for (int i = 0; i < MizrakliAtliSayi; i++)
+                for (int i = 0; i < SpearHorsemanCount; i++)
                 {
-                    birlikler.Add(item);
+                    UntiReserve.Add(item);
                 }
             }
-            if (item.Ad == "Atlı Okçu Birlik")
+            if (item.Name == "HorseArcherUnit")
             {
-                for (int i = 0; i < AtliOkcuSayi; i++)
+                for (int i = 0; i < HorseArcherCount; i++)
                 {
-                    birlikler.Add(item);
+                    UntiReserve.Add(item);
                 }
             }
-            if (item.Ad == "Okçu Piyade Birlik")
+            if (item.Name == "ArcherInfantryUnit")
             {
-                for (int i = 0; i < OkcuPiyadeSayi; i++)
+                for (int i = 0; i < ArcherInfantryCount; i++)
                 {
-                    birlikler.Add(item);
+                    UntiReserve.Add(item);
                 }
             }
         }
-        return birlikler;
+        return UntiReserve;
     }
-    public General GeneralDondur(int Id, string Ad, int EkSaldiri, int EkSavunma, int EkSok, int EkMoral)
+    public General GeneralReturn(int Id, string Name, int additionalAttack, int additionalDefense, int additionalShock, int additionalMorale)
     {
         var general = new General();
         general.Id = Id;
-        general.Ad = Ad;
-        general.EkSaldiri = EkSaldiri;
-        general.EkSavunma = EkSavunma;
-        general.EkSok = EkSok;
-        general.EkMoral = EkMoral;
+        general.Name = Name;
+        general.additionalAttack = additionalAttack;
+        general.additionalDefense = additionalDefense;
+        general.additionalShock = additionalShock;
+        general.additionalMorale = additionalMorale;
 
         return general;
     }
-    public BirlikTuru BirlikTuruDondur(AskerTur Ad, int Deger)
+    public BirlikTuru UnitTypeReturn(AskerTur Name, int Value)
     {
-        var birlikTuru = new BirlikTuru();
-        birlikTuru.Adi = Ad;
-        birlikTuru.Deger = Deger;
-        return birlikTuru;
+        var UnitType = new BirlikTuru();
+        UnitType.Name = Name;
+        UnitType.Value = Value;
+        return UnitType;
     }
-    public Birlik BirlikDondur(int Id, string Ad, BirlikTuru BirlikTuru, int Saldiri, int Savunma, int Sok, int Hiz, int Sayi, int AskerCan, int Moral, Dizilim AktifDizilim)
+    public Birlik UnitReturn(int Id, string Name, BirlikTuru UnitType, int Attack, int Defense, int Shock, int Speed, int Count, int SoldierHealth, int Morale, Dizilim ActiveFormation)
     {
-        var birlik = new Birlik();
+        var unit = new Birlik();
 
-        birlik.Id = Id;
-        birlik.Ad = Ad;
-        birlik.BirlikTuru = BirlikTuru;
-        birlik.Saldiri = Saldiri;
-        birlik.Savunma = Savunma;
-        birlik.Sok = Sok;
-        birlik.Hiz = Hiz;
-        birlik.Sayi = Sayi;
-        birlik.AskerCan = AskerCan;
-        birlik.Moral = Moral;
-        birlik.AktifDizilim = AktifDizilim;
+        unit.Id = Id;
+        unit.Name = Name;
+        unit.UnitType = UnitType;
+        unit.Attack = Attack;
+        unit.Defense = Defense;
+        unit.Shock = Shock;
+        unit.Speed = Speed;
+        unit.Count = Count;
+        unit.SoldierHealth = SoldierHealth;
+        unit.Morale = Morale;
+        unit.ActiveFormation = ActiveFormation;
 
-        return birlik;
+        return unit;
     }
-    public Ordu OrduDondur(General General, List<Birlik> Birlikler)
+    public Ordu ArmyReturn(General General, List<Birlik> Units)
     {
-        var ordu = new Ordu();
-        ordu.General = General;
-        ordu.Birlikler = Birlikler;
+        var army = new Ordu();
+        army.General = General;
+        army.Units = Units;
 
-        return ordu;
+        return army;
     }
-    public Durum durumDondur(Ordu Ordu, int Taraf)
+    public Durum statusReturn(Ordu Army, int Side)
     {
-        var durum = new Durum();
-        durum.Ordu = Ordu;
-        durum.Taraf = Taraf;
+        var status = new Durum();
+        status.Army = Army;
+        status.Side = Side;
 
-        return durum;
+        return status;
     }
-    public BolumTasarimi BolumTasarimiDondur(List<Ordu> Ordu, List<Durum> Durum, int BolumPuani)
+    public BolumTasarimi LevelDesignReturn(List<Ordu> Army, List<Durum> Status, int LevelScore)
     {
-        var bolumTasarimi = new BolumTasarimi();
-        bolumTasarimi.Ordu = Ordu;
-        bolumTasarimi.Durum = Durum;
-        bolumTasarimi.BolumPuani = BolumPuani;
-        return bolumTasarimi;
+        var levelDesign = new BolumTasarimi();
+        levelDesign.Army = Army;
+        levelDesign.Status = Status;
+        levelDesign.LevelScore = LevelScore;
+        return levelDesign;
     }
-    public BirlikTuru TurBelirle(AskerTur TurIsmi)
+    public BirlikTuru SetType(AskerTur TypeName)
     {
-        birlikTuru = new BirlikTuru();
-        foreach (var item in BirlikTurleri)
+        UnitType = new BirlikTuru();
+        foreach (var item in UnitTypes)
         {
-            if (item.Adi == TurIsmi)
+            if (item.Name == TypeName)
             {
-                birlikTuru = item;
+                UnitType = item;
             }
         }
-        return birlikTuru;
+        return UnitType;
     }
-    public General GeneralBelirle(string generalIsmi)
+    public General GeneralDetermine(string generalName)
     {
-        foreach (var item in Generaller)
+        foreach (var item in Generals)
         {
-            if (item.Ad == generalIsmi)
+            if (item.Name == generalName)
             {
                 general = item;
             }
         }
         return general;
     }
-    private float GucHesapla(Birlik birlik)
+    private float PowerCalculate(Birlik Unit)
     {
-        float Saldiri = birlik.Saldiri;
-        float Savunma = birlik.Savunma;
-        float Sok = birlik.Sok;
-        float Hiz = birlik.Hiz;
-        float Moral = birlik.Moral;
-        float Sayi = birlik.Sayi;
-        float Guc = ((Saldiri * Moral * ((Sayi / 10) + 1)) + (Sok * Hiz)) - (Savunma * Moral * ((Sayi / 10) + 1));
-        return Guc;
+        float Attack = Unit.Attack;
+        float Defense = Unit.Defense;
+        float Shock = Unit.Shock;
+        float Speed = Unit.Speed;
+        float Morale = Unit.Morale;
+        float Count = Unit.Count;
+        float Power = ((Attack * Morale * ((Count / 10) + 1)) + (Shock * Speed)) - (Defense * Morale * ((Count / 10) + 1));
+        return Power;
     }
-    public List<GameObject> OrduyuOlustur(Vector3 DogmaNoktasi, int artir, int Sayi, int taraf)
+    public List<GameObject> ArmyCreate(Vector3 SpawnPoint, int increase, int Count, int side)
     {
-        Vector3 KomutanKonum;
-        Quaternion KomutanYon;
-        Vector3 SecmeAlaniKonum;
-        Quaternion SecmeAlaniYon;
-        Vector3 saldiriNoktasiKonum;
-        AskerlerListesi = new List<GameObject>();
-        GameObject newSecmeAlani;
-        GameObject newSaldiriNoktasi;
-        double Karekok = Math.Sqrt(Sayi);
+        Vector3 CommanderLocation;
+        Quaternion CommanderDirection;
+        Vector3 selectionAreaLocation;
+        Quaternion selectionAreaDirection;
+        SoldiersList = new List<GameObject>();
+        GameObject newselectionArea;
+        double Karekok = Math.Sqrt(Count);
         int k = 7;
         int l = 1;
         int m = 5;
@@ -452,45 +437,45 @@ public class BolumOlustur : MonoBehaviour
         int o = 6;
         int p = 1;
 
-        Vector3 pos = new Vector3(DogmaNoktasi.x + artir * 25, 0, DogmaNoktasi.z);
+        Vector3 pos = new Vector3(SpawnPoint.x + increase * 25, 0, SpawnPoint.z);
 
-        KomutanKonum = new Vector3(pos.x, Terrain.activeTerrain.SampleHeight(pos), pos.z);
-        KomutanYon = new Quaternion(0.0f, 0.0f, 0.0f, 0.0f);
-        SecmeAlaniKonum = new Vector3(DogmaNoktasi.x + artir * 25, 10.0f , DogmaNoktasi.z + 6.5f);
-        SecmeAlaniYon = new Quaternion(0.0f, 0.0f, 0.0f, 0.0f);
-        newKomutan = Instantiate(Komutan, KomutanKonum, KomutanYon);
-        newKomutan.name = "Komutan" + a;
+        CommanderLocation = new Vector3(pos.x, Terrain.activeTerrain.SampleHeight(pos), pos.z);
+        CommanderDirection = new Quaternion(0.0f, 0.0f, 0.0f, 0.0f);
+        selectionAreaLocation = new Vector3(SpawnPoint.x + increase * 25, 10.0f, SpawnPoint.z + 6.5f);
+        selectionAreaDirection = new Quaternion(0.0f, 0.0f, 0.0f, 0.0f);
+        newCommander = Instantiate(Commander, CommanderLocation, CommanderDirection);
+        newCommander.name = "Komutan" + a;
 
-        newSecmeAlani = Instantiate(SecmeAlani, SecmeAlaniKonum, SecmeAlaniYon);
-        newSecmeAlani.name = "SecmeAlani" + a;
-        newSecmeAlani.transform.parent = newKomutan.transform;
+        newselectionArea = Instantiate(selectionArea, selectionAreaLocation, selectionAreaDirection);
+        newselectionArea.name = "SecmeAlani" + a;
+        newselectionArea.transform.parent = newCommander.transform;
 
         for (int i = 0; i < Karekok; i++)
         {
             for (int j = 1; j < (Karekok / 2); j++)
             {
 
-                Vector3 PivotKonumArtacak = new Vector3(j * 1.5f, 0.0f, i * 1.5f);
-                GameObject newPivot = Instantiate(Pivot, KomutanKonum + PivotKonumArtacak, KomutanYon);
+                Vector3 PivotLocationWillIncrease = new Vector3(j * 1.5f, 0.0f, i * 1.5f);
+                GameObject newPivot = Instantiate(Pivot, CommanderLocation + PivotLocationWillIncrease, CommanderDirection);
                 newPivot.name = "Pivot" + a + k + l;
-                GameObject newAsker = Instantiate(Asker, KomutanKonum + PivotKonumArtacak, KomutanYon);
-                newAsker.name = "Asker" + a + k + l;
+                GameObject newSoldier = Instantiate(Soldier, CommanderLocation + PivotLocationWillIncrease, CommanderDirection);
+                newSoldier.name = "Asker" + a + k + l;
 
-                if (taraf == 1)
+                if (side == 1)
                 {
-                    MeshRenderer renk = GameObject.Find(newAsker.name).GetComponent<MeshRenderer>();
-                    renk.material = Taraf1;
+                    MeshRenderer color = GameObject.Find(newSoldier.name).GetComponent<MeshRenderer>();
+                    color.material = Side1;
                 }
                 else
                 {
-                    MeshRenderer renk = GameObject.Find(newAsker.name).GetComponent<MeshRenderer>();
-                    renk.material = Taraf2;
+                    MeshRenderer color = GameObject.Find(newSoldier.name).GetComponent<MeshRenderer>();
+                    color.material = Side2;
                 }
 
-                newPivot.transform.parent = newKomutan.transform;
-                takipEdilecekObje = newAsker.GetComponent<ParentTakip>();
-                takipEdilecekObje.target = newPivot.transform;
-                AskerlerListesi.Add(newAsker);
+                newPivot.transform.parent = newCommander.transform;
+                IsFollowedObject = newSoldier.GetComponent<ParentTakip>();
+                IsFollowedObject.target = newPivot.transform;
+                SoldiersList.Add(newSoldier);
                 k += 1;
 
             }
@@ -501,25 +486,25 @@ public class BolumOlustur : MonoBehaviour
         {
             for (int j = 0; j < Karekok; j++)
             {
-                Vector3 PivotKonumArtacak = new Vector3(-i * 1.5f, 0.0f, j * 1.5f);
-                GameObject newPivot = Instantiate(Pivot, KomutanKonum + PivotKonumArtacak, KomutanYon);
+                Vector3 PivotLocationWillIncrease = new Vector3(-i * 1.5f, 0.0f, j * 1.5f);
+                GameObject newPivot = Instantiate(Pivot, CommanderLocation + PivotLocationWillIncrease, CommanderDirection);
                 newPivot.name = "Pivot" + a + m + n;
-                GameObject newAsker = Instantiate(Asker, KomutanKonum + PivotKonumArtacak, KomutanYon);
-                newAsker.name = "Asker" + a + m + n;
-                if (taraf == 1)
+                GameObject newSoldier = Instantiate(Soldier, CommanderLocation + PivotLocationWillIncrease, CommanderDirection);
+                newSoldier.name = "Asker" + a + m + n;
+                if (side == 1)
                 {
-                    MeshRenderer renk = GameObject.Find(newAsker.name).GetComponent<MeshRenderer>();
-                    renk.material = Taraf1;
+                    MeshRenderer color = GameObject.Find(newSoldier.name).GetComponent<MeshRenderer>();
+                    color.material = Side1;
                 }
                 else
                 {
-                    MeshRenderer renk = GameObject.Find(newAsker.name).GetComponent<MeshRenderer>();
-                    renk.material = Taraf2;
+                    MeshRenderer color = GameObject.Find(newSoldier.name).GetComponent<MeshRenderer>();
+                    color.material = Side2;
                 }
-                newPivot.transform.parent = newKomutan.transform;
-                takipEdilecekObje = newAsker.GetComponent<ParentTakip>();
-                takipEdilecekObje.target = newPivot.transform;
-                AskerlerListesi.Add(newAsker);
+                newPivot.transform.parent = newCommander.transform;
+                IsFollowedObject = newSoldier.GetComponent<ParentTakip>();
+                IsFollowedObject.target = newPivot.transform;
+                SoldiersList.Add(newSoldier);
                 n += 1;
             }
             m -= 1;
@@ -527,29 +512,29 @@ public class BolumOlustur : MonoBehaviour
         }
         for (int i = 0; i < Karekok; i++)
         {
-            Vector3 PivotKonumArtacak = new Vector3(0, 0.0f, i * 1.5f);
-            GameObject newPivot = Instantiate(Pivot, KomutanKonum + PivotKonumArtacak, KomutanYon);
+            Vector3 PivotLocationWillIncrease = new Vector3(0, 0.0f, i * 1.5f);
+            GameObject newPivot = Instantiate(Pivot, CommanderLocation + PivotLocationWillIncrease, CommanderDirection);
             newPivot.name = "Pivot" + a + o + p;
-            
-            GameObject newAsker = Instantiate(Asker, KomutanKonum + PivotKonumArtacak, KomutanYon);
-            newAsker.name = "Asker" + a + o + p;
 
-            if (taraf == 1)
+            GameObject newSoldier = Instantiate(Soldier, CommanderLocation + PivotLocationWillIncrease, CommanderDirection);
+            newSoldier.name = "Asker" + a + o + p;
+
+            if (side == 1)
             {
-                MeshRenderer renk = GameObject.Find(newAsker.name).GetComponent<MeshRenderer>();
-                renk.material = Taraf1;
+                MeshRenderer color = GameObject.Find(newSoldier.name).GetComponent<MeshRenderer>();
+                color.material = Side1;
             }
             else
             {
-                MeshRenderer renk = GameObject.Find(newAsker.name).GetComponent<MeshRenderer>();
-                renk.material = Taraf2;
+                MeshRenderer color = GameObject.Find(newSoldier.name).GetComponent<MeshRenderer>();
+                color.material = Side2;
             }
-            newPivot.transform.parent = newKomutan.transform;
-            takipEdilecekObje = newAsker.GetComponent<ParentTakip>();
-            takipEdilecekObje.target = newPivot.transform;
-            AskerlerListesi.Add(newAsker);
+            newPivot.transform.parent = newCommander.transform;
+            IsFollowedObject = newSoldier.GetComponent<ParentTakip>();
+            IsFollowedObject.target = newPivot.transform;
+            SoldiersList.Add(newSoldier);
             p += 1;
         }
-        return AskerlerListesi;
+        return SoldiersList;
     }
 }

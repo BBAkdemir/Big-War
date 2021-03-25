@@ -6,277 +6,278 @@ using UnityEngine;
 
 public class OrduDiziliminiDüzenle : MonoBehaviour
 {
-    private HangisiHareketEtsin erisim;
-    private ParentTakip Asker;
-    private AskerSavas AskerSavasScript;
-    private HangisiHareketEtsin hareketEdecek;
-    private OrduHareket KomutaniAl;
-    private BirlikOzellik BirlikOzellik;
-    private Dizilim dizilim;
+    private HangisiHareketEtsin access;
+    private ParentTakip Soldier;
+    private AskerSavas SoldierWarScript;
+    private HangisiHareketEtsin movementObject;
+    private OrduHareket GetCommander;
+    private BirlikOzellik UnitProperty;
+    private Dizilim formation;
 
-    private GameObject Komutan;
-    private GameObject hareketEdecekObje;
-    private GameObject hareketEdecekObjeEbeveyni;
-    private GameObject hareketEdecekObjeAsker;
-    private GameObject SecmeAlaniAl;
-    private GameObject secmeAlani;
-    private GameObject ebeveynYedek;
+    private GameObject Commander;
+    private GameObject GetMovementObject;
+    private GameObject GetMovementObjectParent;
+    private GameObject GetMovementObjectSoldier;
+    private GameObject GetselectionArea;
+    private GameObject selectionArea;
+    private GameObject parentReserve;
 
-    private List<GameObject> askerler;
-    public List<Dizilim> dizilimListesi;
+    private List<GameObject> soldiers;
+    public List<Dizilim> formationList;
 
-    private bool f1Tiklanmismi;
+    private bool ClickedF1;
     
-    private Quaternion Yon;
-    private Vector3 SecmeAlaniKonum;
-    private Vector3 KomutanKonum;
-    private Vector3 SecmeAlaniBoyut;
+    private Quaternion Direction;
+    private Vector3 selectionAreaLocation;
+    private Vector3 CommanderLocation;
+    private Vector3 selectionAreaSize;
 
     public OrduDiziliminiDüzenle()
     {
-        List<Dizilim> dizilimListesi = new List<Dizilim>();
-        dizilimListesi.Add(dizilim1());
-        dizilimListesi.Add(dizilim2());
-        dizilimListesi.Add(dizilim3());
-        this.dizilimListesi = dizilimListesi;
+        List<Dizilim> formationList = new List<Dizilim>();
+        formationList.Add(formation1());
+        formationList.Add(formation2());
+        formationList.Add(formation3());
+        this.formationList = formationList;
     }
     private void Start()
     {
-        Komutan = gameObject.transform.parent.gameObject;
-        BirlikOzellik = Komutan.GetComponent<BirlikOzellik>();
+        Commander = gameObject.transform.parent.gameObject;
+        UnitProperty = Commander.GetComponent<BirlikOzellik>();
     }
     void Update()
     {
-        hareketEdecek = GameObject.Find("HangisiHareketEtsin").GetComponent<HangisiHareketEtsin>();
-        askerler = new List<GameObject>();
+        movementObject = GameObject.Find("HangisiHareketEtsin").GetComponent<HangisiHareketEtsin>();
+        soldiers = new List<GameObject>();
         
-        if (BirlikOzellik.yenidenDizil == true)
+        if (UnitProperty.ReFormation == true)
         {
-            hareketEdecekObjeEbeveyni = Komutan;
-            ebeveynYedek = hareketEdecekObjeEbeveyni;
-            ListeyeAl(Komutan);
-            DizilimiDegistir(BirlikOzellik.AktifDizilim, Komutan, ebeveynYedek);
+            GetMovementObjectParent = Commander;
+            parentReserve = GetMovementObjectParent;
+            TakeList(Commander);
+            FormationChange(UnitProperty.ActiveFormation, Commander, parentReserve);
+            UnitProperty.ReFormation = false;
         }
 
-        if (f1Tiklanmismi && (hareketEdecek.hareketEdecek.tag == "SecmeAlani" || hareketEdecek.hareketEdecek.tag == "Askerler1"))//hareket edecek varmı diye kontrol et
+        if (ClickedF1 && (movementObject.movementObject.tag == "selectionArea" || movementObject.movementObject.tag == "Askerler1"))//hareket edecek varmı diye kontrol et
         {
-            PivotVeSecmeAlaniAl();
-            ebeveynYedek = hareketEdecekObjeEbeveyni;
+            GetPivotAndselectionArea();
+            parentReserve = GetMovementObjectParent;
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                DizilimiDegistir(dizilim1(), hareketEdecekObjeEbeveyni, ebeveynYedek);
+                FormationChange(formation1(), GetMovementObjectParent, parentReserve);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                DizilimiDegistir(dizilim2(), hareketEdecekObjeEbeveyni, ebeveynYedek);
+                FormationChange(formation2(), GetMovementObjectParent, parentReserve);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha3))
             {
-                DizilimiDegistir(dizilim3(), hareketEdecekObjeEbeveyni, ebeveynYedek);
+                FormationChange(formation3(), GetMovementObjectParent, parentReserve);
             }
         }
 
         if (Input.GetKeyDown(KeyCode.F1))
         {
-            f1Tiklanmismi = true;
+            ClickedF1 = true;
         }
     }
-    public void DizilimiDegistir(Dizilim dizilim, GameObject komutan, GameObject komutanYedek)
+    public void FormationChange(Dizilim formation, GameObject commander, GameObject commanderReserve)
     {
-        BirlikOzellik.AktifDizilim = dizilim;
-        Quaternion yon = komutan.transform.rotation;
-        SecmeAlaniBoyut = new Vector3(1.5f * dizilim.X + 2, 10, 1.5f * dizilim.Z + 2);
-        SecmeAlaniKonum = new Vector3(komutan.transform.position.x, komutan.transform.position.y - 25, komutan.transform.position.z);
-        KomutanKonum = new Vector3(komutan.transform.position.x, komutan.transform.position.y, komutan.transform.position.z);
+        UnitProperty.ActiveFormation = formation;
+        Quaternion yon = commander.transform.rotation;
+        selectionAreaSize = new Vector3(1.5f * formation.X + 2, 10, 1.5f * formation.Z + 2);
+        selectionAreaLocation = new Vector3(commander.transform.position.x, commander.transform.position.y - 25, commander.transform.position.z);
+        CommanderLocation = new Vector3(commander.transform.position.x, commander.transform.position.y, commander.transform.position.z);
 
-        secmeAlani.transform.localScale = SecmeAlaniBoyut;
-        secmeAlani.transform.position = SecmeAlaniKonum;
+        selectionArea.transform.localScale = selectionAreaSize;
+        selectionArea.transform.position = selectionAreaLocation;
 
-        Yon = new Quaternion(0, -komutanYedek.transform.rotation.y, 0, 0);
+        Direction = new Quaternion(0, -commanderReserve.transform.rotation.y, 0, 0);
 
-        ParentDegistir(false, secmeAlani, askerler);
+        ParentChange(false, selectionArea, soldiers);
 
-        komutanYedek.transform.position = KomutanKonum;
+        commanderReserve.transform.position = CommanderLocation;
 
-        ParentDegistir(true, secmeAlani, askerler);
+        ParentChange(true, selectionArea, soldiers);
 
-        secmeAlani.transform.rotation = Yon;
+        selectionArea.transform.rotation = Direction;
 
-        ParentDegistir(false, secmeAlani, askerler);
+        ParentChange(false, selectionArea, soldiers);
 
-        Yon = new Quaternion(0, 0, 0, 0);
-        komutanYedek.transform.rotation = Yon;
+        Direction = new Quaternion(0, 0, 0, 0);
+        commanderReserve.transform.rotation = Direction;
 
-        ParentDegistir(true, secmeAlani, askerler);
+        ParentChange(true, selectionArea, soldiers);
 
         int b = 0;
         int a = 0;
 
-        for (int i = dizilim.Z; i > 0; i--)
+        for (int i = formation.Z; i > 0; i--)
         {
-            for (int j = dizilim.X; j > 0; j--)
+            for (int j = formation.X; j > 0; j--)
             {
-                if (dizilim.Detays[a].Deger == 1)
+                if (formation.Details[a].Count == 1)
                 {
-                    Vector3 PivotKonumArtacak = new Vector3((j * 1.5f) + (komutan.transform.position.x) - ((dizilim.X / 2) * 1.5f), komutan.transform.position.y, (i * 1.5f) + (komutan.transform.position.z) - ((1.5f * dizilim.Z + 2) / 2));
-                    if (askerler.Count <= b)
+                    Vector3 PivotPositionWillIncrease = new Vector3((j * 1.5f) + (commander.transform.position.x) - ((formation.X / 2) * 1.5f), commander.transform.position.y, (i * 1.5f) + (commander.transform.position.z) - ((1.5f * formation.Z + 2) / 2));
+                    if (soldiers.Count <= b)
                     {
                         break;
                     }
-                    askerler[b].transform.rotation = Yon;
-                    askerler[b].transform.position = PivotKonumArtacak;
+                    soldiers[b].transform.rotation = Direction;
+                    soldiers[b].transform.position = PivotPositionWillIncrease;
                     b++;
                 }
                 a++;
             }
-            if (askerler.Count <= b)
+            if (soldiers.Count <= b)
             {
                 break;
             }
         }
-        komutan.transform.rotation = yon;
-        f1Tiklanmismi = false;
+        commander.transform.rotation = yon;
+        ClickedF1 = false;
     }
-    public void PivotVeSecmeAlaniAl()
+    public void GetPivotAndselectionArea()
     {
-        erisim = GameObject.Find("HangisiHareketEtsin").GetComponent<HangisiHareketEtsin>();
-        askerler = new List<GameObject>();
-        KomutaniAl = GameObject.FindWithTag("Komutan").GetComponent<OrduHareket>();
-        Asker = GameObject.Find(erisim.hareketEdecek.name).GetComponent<ParentTakip>();
-        if (erisim.hareketEdecek.tag == "Askerler1")
+        access = GameObject.Find("HangisiHareketEtsin").GetComponent<HangisiHareketEtsin>();
+        soldiers = new List<GameObject>();
+        GetCommander = GameObject.FindWithTag("Komutan").GetComponent<OrduHareket>();
+        Soldier = GameObject.Find(access.movementObject.name).GetComponent<ParentTakip>();
+        if (access.movementObject.tag == "Askerler1")
         {
-            hareketEdecekObjeAsker = Asker.target.gameObject;
+            GetMovementObjectSoldier = Soldier.target.gameObject;
         }
 
-        if (erisim.hareketEdecek != null && (erisim.hareketEdecek.tag == "SecmeAlani" || erisim.hareketEdecek.tag == "Askerler1"))
+        if (access.movementObject != null && (access.movementObject.tag == "selectionArea" || access.movementObject.tag == "Askerler1"))
         {
             var a = 0;
-            if (erisim.hareketEdecek.tag == "SecmeAlani")
+            if (access.movementObject.tag == "selectionArea")
             {
-                hareketEdecekObjeEbeveyni = erisim.hareketEdecek.transform.parent.gameObject;
+                GetMovementObjectParent = access.movementObject.transform.parent.gameObject;
             }
-            else if (erisim.hareketEdecek.tag == "Askerler1")
+            else if (access.movementObject.tag == "Askerler1")
             {
-                hareketEdecekObjeEbeveyni = hareketEdecekObjeAsker.transform.parent.gameObject;
+                GetMovementObjectParent = GetMovementObjectSoldier.transform.parent.gameObject;
             }
-            ListeyeAl(hareketEdecekObjeEbeveyni);
+            TakeList(GetMovementObjectParent);
         }
     }
-    public void ParentDegistir(bool açKapa, GameObject obje, List<GameObject> askerler)
+    public void ParentChange(bool openClose, GameObject obj, List<GameObject> soldiers)
     {
-        if (açKapa == true)
+        if (openClose == true)
         {
-            obje.transform.parent = ebeveynYedek.transform;
-            foreach (var item in askerler)
+            obj.transform.parent = parentReserve.transform;
+            foreach (var item in soldiers)
             {
-                item.transform.parent = ebeveynYedek.transform;
+                item.transform.parent = parentReserve.transform;
             }
         }
         else
         {
-            obje.transform.parent = null;
-            foreach (var item in askerler)
+            obj.transform.parent = null;
+            foreach (var item in soldiers)
             {
                 item.transform.parent = null;
             }
         }
     }
-    public void ListeyeAl(GameObject obje)
+    public void TakeList(GameObject obj)
     {
         var a = 0;
-        for (int i = 0; i < obje.transform.childCount; i++)
+        for (int i = 0; i < obj.transform.childCount; i++)
         {
-            if (obje.transform.GetChild(i).gameObject.tag == "SecmeAlani")
+            if (obj.transform.GetChild(i).gameObject.tag == "selectionArea")
             {
-                secmeAlani = obje.transform.GetChild(i).gameObject; //Sçme alanını aldım.
+                selectionArea = obj.transform.GetChild(i).gameObject; //Sçme alanını aldım.
                 a = i;
                 break;
             }
 
         }
-        for (int i = 0; i < obje.transform.childCount; i++)
+        for (int i = 0; i < obj.transform.childCount; i++)
         {
             if (i != a)
             {
-                askerler.Add(obje.transform.GetChild(i).gameObject); // askerleri liseteye attık
+                soldiers.Add(obj.transform.GetChild(i).gameObject); // soldiersi liseteye attık
             }
         }
     }
-    public Dizilim dizilim1()
+    public Dizilim formation1()
     {
-        dizilim = new Dizilim();
-        dizilim.X = 10;
-        dizilim.Z = 10;
-        dizilim.Adi = "Klasik Dizilim";
-        dizilim.Detays = new List<Detay>();
+        formation = new Dizilim();
+        formation.X = 10;
+        formation.Z = 10;
+        formation.Name = "Klasik Dizilim";
+        formation.Details = new List<Detay>();
 
-        for (int i = 0; i < dizilim.X; i++)
+        for (int i = 0; i < formation.X; i++)
         {
-            for (int j = 0; j < dizilim.Z; j++)
+            for (int j = 0; j < formation.Z; j++)
             {
                 var detay = new Detay();
                 detay.X = i;
                 detay.Z = j;
-                detay.Deger = 1;
-                dizilim.Detays.Add(detay);
+                detay.Count = 1;
+                formation.Details.Add(detay);
             }
         }
-        return dizilim;
+        return formation;
     }
-    public Dizilim dizilim2()
+    public Dizilim formation2()
     {
-        dizilim = new Dizilim();
-        dizilim.X = 20;
-        dizilim.Z = 5;
-        dizilim.Adi = "Geniş Dizilim";
-        dizilim.Detays = new List<Detay>();
+        formation = new Dizilim();
+        formation.X = 20;
+        formation.Z = 5;
+        formation.Name = "Geniş Dizilim";
+        formation.Details = new List<Detay>();
 
-        for (int i = 0; i < dizilim.X; i++)
+        for (int i = 0; i < formation.X; i++)
         {
-            for (int j = 0; j < dizilim.Z; j++)
+            for (int j = 0; j < formation.Z; j++)
             {
                 var detay = new Detay();
                 detay.X = i;
                 detay.Z = j;
-                detay.Deger = 1;
-                dizilim.Detays.Add(detay);
+                detay.Count = 1;
+                formation.Details.Add(detay);
             }
         }
-        return dizilim;
+        return formation;
     }
-    public Dizilim dizilim3()
+    public Dizilim formation3()
     {
-        dizilim = new Dizilim();
-        dizilim.X = 19;
-        dizilim.Z = 10;
-        dizilim.Adi = "Klasik Dizilim";
-        dizilim.Detays = new List<Detay>();
+        formation = new Dizilim();
+        formation.X = 19;
+        formation.Z = 10;
+        formation.Name = "Üçgen Dizilim";
+        formation.Details = new List<Detay>();
         var a = 1;
 
-        for (int i = 0; i < dizilim.Z; i++)
+        for (int i = 0; i < formation.Z; i++)
         {
 
-            var b = (dizilim.X - a) / 2;
+            var b = (formation.X - a) / 2;
             for (int j = 0; j < b; j++)
             {
                 var detay = new Detay();
-                detay.Deger = 0;
-                dizilim.Detays.Add(detay);
+                detay.Count = 0;
+                formation.Details.Add(detay);
             }
             for (int j = 0; j < a; j++)
             {
                 var detay = new Detay();
-                detay.Deger = 1;
-                dizilim.Detays.Add(detay);
+                detay.Count = 1;
+                formation.Details.Add(detay);
             }
             for (int j = 0; j < b; j++)
             {
                 var detay = new Detay();
-                detay.Deger = 0;
-                dizilim.Detays.Add(detay);
+                detay.Count = 0;
+                formation.Details.Add(detay);
             }
             a = a + 2;
         }
-        return dizilim;
+        return formation;
     }
 }

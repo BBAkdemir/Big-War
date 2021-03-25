@@ -7,6 +7,6 @@ using System.Threading.Tasks;
     {
         public int X { get; set; }
         public int Z { get; set; }
-        public string Adi { get; set; }
-        public List<Detay> Detays { get; set; }
+        public string Name { get; set; }
+        public List<Detay> Details { get; set; }
     }

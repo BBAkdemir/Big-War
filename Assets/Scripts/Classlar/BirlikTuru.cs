@@ -4,6 +4,6 @@ using UnityEngine;
 
 public class BirlikTuru
 {
-    public AskerTur Adi { get; set; }
-    public int Deger { get; set; }
+    public AskerTur Name { get; set; }
+    public int Value { get; set; }
 }

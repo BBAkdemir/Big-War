@@ -6,6 +6,6 @@ public class Detay
 {
     public int X { get; set; }
     public int Z { get; set; }
-    public int Deger { get; set; }
+    public int Count { get; set; }
 
 }

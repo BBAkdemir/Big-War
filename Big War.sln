@@ -18,6 +18,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7DA2752D-CA3C-42EA-8DCB-5243BD85FDC7}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		TestSettings1.testsettings = TestSettings1.testsettings
 	EndProjectSection
 EndProject
 Global

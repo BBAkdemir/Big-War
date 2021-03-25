@@ -7,127 +7,134 @@ using UnityEngine.AI;
 
 public class OrduHareket : MonoBehaviour
 {
-    public HangisiHareketEtsin erisim;
-    public ParentTakip Asker;
-    public GameObject hareketEdecekObje;
-    public GameObject hareketEdecekObjeAsker;
-    public GameObject SecmeAlaniAl;
-    private GameObject hareketEdecekObjeDeğisken;
-    public Vector3 HedefPozisyonu;
-    public List<Komutan> komutans;
+    public HangisiHareketEtsin access;
+    public ParentTakip Soldier;
+    public GameObject movementObjectCreated;
+    public GameObject movementObjectCreatedSoldier;
+    public GameObject getSelectArea;
+    private GameObject movementObjectCreatedVariable;
+    public Vector3 targetPosition;
+    public List<Komutan> commanders;
     public NavMeshAgent navMeshAgent;
 
-    public BirlikOzellik ozellik;
+    public BirlikOzellik property;
     void Start()
     {
-        erisim = GameObject.Find("HangisiHareketEtsin").GetComponent<HangisiHareketEtsin>();
+        access = GameObject.Find("HangisiHareketEtsin").GetComponent<HangisiHareketEtsin>();
         navMeshAgent = GameObject.FindWithTag("Askerler1").GetComponent<NavMeshAgent>();
-        HedefPozisyonu = transform.position;
+        targetPosition = transform.position;
 
-        komutans = new List<Komutan>();
+        commanders = new List<Komutan>();
     }
-    void gidilecekKonumBul(GameObject hareketEdecek)
+    void findTheDestination(GameObject movementObject)
     {
-        Plane Yuzey = new Plane(Vector3.up, transform.position);
-        Ray isinGonder = Camera.main.ScreenPointToRay(Input.mousePosition);
-        float Mesafe = 0.0f;
-        if (Yuzey.Raycast(isinGonder, out Mesafe))
+        Plane surface = new Plane(Vector3.up, transform.position);
+        Ray sendRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+        float distance = 0.0f;
+        if (surface.Raycast(sendRay, out distance))
         {
-            HedefPozisyonu = isinGonder.GetPoint(Mesafe);
-            var komutan = new Komutan()
+            targetPosition = sendRay.GetPoint(distance);
+            var commander = new Komutan()
             {
-                HedefKonum = HedefPozisyonu,
-                KomutanNesnesi = hareketEdecek,
-                HareketSerbestMi = true
+                TargetLocation = targetPosition,
+                CommanderObject = movementObject,
+                IsMovementFree = true
             };
-            hareketEdecek.transform.parent.position = hareketEdecek.transform.position;
-            if (komutans.Any(a => a.KomutanNesnesi == hareketEdecek))
+            movementObject.transform.parent.position = movementObject.transform.position;
+            if (commanders.Any(a => a.CommanderObject == movementObject))
             {
-                var silKomutan = komutans.Where(a => a.KomutanNesnesi == hareketEdecek).FirstOrDefault();
-                komutans.Remove(silKomutan);
-                komutans.Add(komutan);
+                var removeCommander = commanders.Where(a => a.CommanderObject == movementObject).FirstOrDefault();
+                commanders.Remove(removeCommander);
+                commanders.Add(commander);
             }
             else
             {
-                komutans.Add(komutan);
+                commanders.Add(commander);
             }
         }
     }
 
-    void NesneyiHareketeGecir(List<Komutan> komutans)
+    void moveOnUnit(List<Komutan> commanders)
     {
-        foreach (var item in komutans)
+        foreach (var item in commanders)
         {
-            if (item.HareketSerbestMi == true)
+            if (item.IsMovementFree == true)
             {
-                ozellik = item.KomutanNesnesi.transform.parent.GetComponent<BirlikOzellik>();
-                Vector3 konum = new Vector3(item.HedefKonum.x, item.KomutanNesnesi.transform.parent.position.y, item.HedefKonum.z);
-                item.KomutanNesnesi.transform.parent.position = Vector3.MoveTowards(item.KomutanNesnesi.transform.parent.position, konum, 20 * Time.deltaTime);
-                if (item.KomutanNesnesi.transform.parent.position == item.HedefKonum)
+                property = item.CommanderObject.transform.parent.GetComponent<BirlikOzellik>();
+                Vector3 konum = new Vector3(item.TargetLocation.x, item.CommanderObject.transform.parent.position.y, item.TargetLocation.z);
+                item.CommanderObject.transform.parent.position = Vector3.MoveTowards(item.CommanderObject.transform.parent.position, konum, 20 * Time.deltaTime);
+                if (item.CommanderObject.transform.parent.position == item.TargetLocation)
                 {
-                    item.HareketSerbestMi = false;
+                    item.IsMovementFree = false;
                 }
-                item.KomutanNesnesi.transform.parent.LookAt(new Vector3(item.HedefKonum.x, item.KomutanNesnesi.transform.parent.position.y, item.HedefKonum.z));
+                item.CommanderObject.transform.parent.LookAt(new Vector3(item.TargetLocation.x, item.CommanderObject.transform.parent.position.y, item.TargetLocation.z));
             }
         }
     }
     void Update()
     {
-        hareketEdecekObje = erisim.hareketEdecek;
+        movementObjectCreated = access.movementObject;
         bool flag = false;
-        if (hareketEdecekObje != null)
+        GameObject chosen = movementObjectCreated;
+        if (movementObjectCreated != null)
         {
-            if (hareketEdecekObje.tag == "Terrain" || hareketEdecekObje.transform.parent.gameObject == gameObject)
+            if (movementObjectCreated.transform.parent != null && movementObjectCreated.transform.parent.gameObject == gameObject)
+                chosen = movementObjectCreated.transform.parent.gameObject;
+
+            if (movementObjectCreated.tag == "Askerler1")
+                chosen = GameObject.Find(movementObjectCreated.name).GetComponent<ParentTakip>().target.transform.parent.gameObject;
+
+            if (movementObjectCreated.tag == "Terrain" || chosen == gameObject)
                 flag = true;
         }
 
         if (flag)
         {
-            if (hareketEdecekObje != null && hareketEdecekObje.tag == "Askerler1")
+            if (movementObjectCreated != null && movementObjectCreated.tag == "Askerler1")
             {
-                Asker = GameObject.Find(hareketEdecekObje.name).GetComponent<ParentTakip>();
-                hareketEdecekObjeAsker = Asker.target.gameObject;
+                Soldier = GameObject.Find(movementObjectCreated.name).GetComponent<ParentTakip>();
+                movementObjectCreatedSoldier = Soldier.target.gameObject;
             }
             else
             {
-                hareketEdecekObjeAsker = null;
+                movementObjectCreatedSoldier = null;
             }
             if (Input.GetMouseButtonDown(0))
             {
-                if (hareketEdecekObje.tag == "SecmeAlani" || hareketEdecekObje.tag == "Askerler1")
+                if (movementObjectCreated.tag == "selectionArea" || movementObjectCreated.tag == "Askerler1")
                 {
-                    hareketEdecekObjeDeğisken = hareketEdecekObje;
+                    movementObjectCreatedVariable = movementObjectCreated;
                 }
                 else
                 {
-                    hareketEdecekObjeDeğisken = null;
+                    movementObjectCreatedVariable = null;
                 }
             }
             else if (Input.GetMouseButtonDown(1))
             {
-                if (hareketEdecekObje != null)
+                if (movementObjectCreated != null)
                 {
-                    if (hareketEdecekObje.tag == "SecmeAlani")
+                    if (movementObjectCreated.tag == "selectionArea")
                     {
-                        gidilecekKonumBul(hareketEdecekObjeDeğisken);
+                        findTheDestination(movementObjectCreatedVariable);
 
                     }
-                    else if (hareketEdecekObje.tag == "Askerler1")
+                    else if (movementObjectCreated.tag == "Askerler1")
                     {
                         for (int i = 0; i < 101; i++)
                         {
-                            if (hareketEdecekObjeAsker.transform.parent.gameObject.transform.GetChild(i).gameObject.tag == "SecmeAlani")
+                            if (movementObjectCreatedSoldier.transform.parent.gameObject.transform.GetChild(i).gameObject.tag == "selectionArea")
                             {
-                                SecmeAlaniAl = hareketEdecekObjeAsker.transform.parent.gameObject.transform.GetChild(i).gameObject; //Sçme alanını aldım.
+                                getSelectArea = movementObjectCreatedSoldier.transform.parent.gameObject.transform.GetChild(i).gameObject; //Sçme alanını aldım.
                                 break;
                             }
                         }
-                        gidilecekKonumBul(SecmeAlaniAl);
+                        findTheDestination(getSelectArea);
                     }
                 }
             }
             flag = false;
         }
-        NesneyiHareketeGecir(komutans);
+        moveOnUnit(commanders);
     }
 }

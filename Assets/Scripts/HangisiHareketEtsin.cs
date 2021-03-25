@@ -6,30 +6,30 @@ using UnityEngine;
 
 public class HangisiHareketEtsin : MonoBehaviour
 {
-    public GameObject hareketEdecek;
+    public GameObject movementObject;
     void Start()
     {
-        hareketEdecek = null;
+        movementObject = null;
     }
-    void SelectObject(GameObject komutan)
+    void SelectObject(GameObject commander)
     {
-        if(hareketEdecek != null)
+        if(movementObject != null)
         {
-            if(komutan == hareketEdecek)
+            if(commander == movementObject)
             {
                 return;
             }
             ClearSelection();
         }
-        hareketEdecek = komutan;
+        movementObject = commander;
     }
     void ClearSelection()
     {
-        if(hareketEdecek == null)
+        if(movementObject == null)
         {
             return;
         }
-        hareketEdecek = null;
+        movementObject = null;
     }
     void Update()
     {

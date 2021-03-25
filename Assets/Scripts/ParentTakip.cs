@@ -9,80 +9,78 @@ public class ParentTakip : MonoBehaviour
     int a;
 
     public Transform target;
-    public GameObject SecmeAlani;
+    public GameObject selectionArea;
     public Terrain terrain;
-    private List<GameObject> askerler;
+    private List<GameObject> soldiers;
     public float speedPosition = 2f, speedRotation = 1f;
     
-    private NavMeshAgent yapayZeka;
+    private NavMeshAgent ArtificialIntelligence;
     private NavMeshPath navpath;
-    public Vector3 YedekHedefPozisyon;
-    public List<Komutan> komutans;
+    public Vector3 reserveTargetPosition;
+    public List<Komutan> commanders;
 
-    BirlikOzellik komutan;
-    OrduHareket komutanOrduHareket;
+    BirlikOzellik commander;
+    OrduHareket commanderTake;
     Vector3 move;
     void Start()
     {
-        komutan = target.transform.parent.gameObject.GetComponent<BirlikOzellik>();
-        komutanOrduHareket = target.transform.parent.gameObject.GetComponent<OrduHareket>();
-        yapayZeka = GetComponent<NavMeshAgent>();
-        speedPosition = UnityEngine.Random.Range(komutan.Hiz, komutan.Hiz + 0.3f);
-        askerler = new List<GameObject>();
+        commander = target.transform.parent.gameObject.GetComponent<BirlikOzellik>();
+        commanderTake = target.transform.parent.gameObject.GetComponent<OrduHareket>();
+        ArtificialIntelligence = GetComponent<NavMeshAgent>();
+        speedPosition = UnityEngine.Random.Range(commander.Speed, commander.Speed + 0.3f);
+        soldiers = new List<GameObject>();
         for (int i = 0; i < target.transform.parent.gameObject.transform.childCount; i++)
         {
-            if (target.transform.parent.gameObject.transform.GetChild(i).gameObject.tag == "SecmeAlani")
+            if (target.transform.parent.gameObject.transform.GetChild(i).gameObject.tag == "selectionArea")
             {
-                SecmeAlani = target.transform.parent.gameObject.transform.GetChild(i).gameObject; //Sçme alanını aldım.
+                selectionArea = target.transform.parent.gameObject.transform.GetChild(i).gameObject; //Seçme alanını aldım.
                 break;
             }
         }
-        askerler = komutan.Askerler;
+        soldiers = commander.Soldiers;
         var rnd1 = new System.Random();
-        rand = rnd1.Next(askerler.Count);
+        rand = rnd1.Next(soldiers.Count);
     }
     void Update()
     {
-        SecmeAlaniTakip(SecmeAlani);
+        selectionAreaFollow(selectionArea);
         move = new Vector3(target.position.x, transform.position.y, target.position.z);
 
         #region Gidilemeyecek Yerlere Basmamamızı Sağlayan Kod
         navpath = new NavMeshPath();
-        Vector3 pos = komutanOrduHareket.HedefPozisyonu;
-        pos.y = Terrain.activeTerrain.SampleHeight(komutanOrduHareket.HedefPozisyonu);
-        yapayZeka.CalculatePath(pos, navpath);
+        Vector3 pos = commanderTake.targetPosition;
+        pos.y = Terrain.activeTerrain.SampleHeight(commanderTake.targetPosition);
+        ArtificialIntelligence.CalculatePath(pos, navpath);
         if (navpath.status == NavMeshPathStatus.PathComplete)
         {
-            yapayZeka.isStopped = false;
-            yapayZeka.destination = move;
-            YedekHedefPozisyon = komutanOrduHareket.HedefPozisyonu;
+            ArtificialIntelligence.isStopped = false;
+            ArtificialIntelligence.destination = move;
+            reserveTargetPosition = commanderTake.targetPosition;
         }
-        
-
         else
         {
-            komutans = komutanOrduHareket.komutans;
+            commanders = commanderTake.commanders;
 
-            foreach (var item in komutans)
+            foreach (var item in commanders)
             {
-                if (item.KomutanNesnesi.transform.parent.gameObject == target.transform.parent.gameObject)
+                if (item.CommanderObject.transform.parent.gameObject == target.transform.parent.gameObject)
                 {
-                    item.HedefKonum = YedekHedefPozisyon;
+                    item.TargetLocation = reserveTargetPosition;
                 }
             }
         }
         #endregion
 
-        yapayZeka.speed = speedPosition;
+        ArtificialIntelligence.speed = speedPosition;
     }
-    public void SecmeAlaniTakip(GameObject secmeAlani)
+    public void selectionAreaFollow(GameObject selectionArea)
     {
-        while(askerler[rand] == null){
+        while(soldiers[rand] == null){
             var rnd1 = new System.Random();
-            rand = rnd1.Next(askerler.Count);
+            rand = rnd1.Next(soldiers.Count);
         }
-        GameObject asker = askerler[rand];
-        Vector3 pos = new Vector3(asker.transform.position.x, asker.transform.position.y + 10, asker.transform.position.z);
-        secmeAlani.transform.position = pos;
+        GameObject soldier = soldiers[rand];
+        Vector3 pos = new Vector3(soldier.transform.position.x, soldier.transform.position.y + 10, soldier.transform.position.z);
+        selectionArea.transform.position = pos;
     }
 }

@@ -5,60 +5,60 @@ using UnityEngine;
 public class BirlikOzellik : MonoBehaviour
 {
     public int Id;
-    public string Ad;
-    public AskerTur BirlikTuru;
-    public float Saldiri;
-    public float Savunma;
-    public float Sok;
-    public float Hiz;
-    public int Sayi;
-    public float AskerCan;
-    public float Moral;
-    public float Guc;
-    public string GeneralAd;
-    public int Taraf;
-    public Dizilim AktifDizilim;
-    public bool yenidenDizil = false;
-    public List<GameObject> Askerler;
-    public GameObject Dusman1;
-    public GameObject Dusman2;
-    public GameObject Dusman3;
-    public GameObject Dusman4;
+    public string Name;
+    public AskerTur TroopType;
+    public float Attack;
+    public float Defense;
+    public float Shock;
+    public float Speed;
+    public int Count;
+    public float SoldierHealth;
+    public float Morale;
+    public float Power;
+    public string GeneralName;
+    public int Side;
+    public Dizilim ActiveFormation;
+    public bool ReFormation = false;
+    public List<GameObject> Soldiers;
+    public GameObject Enemy1;
+    public GameObject Enemy2;
+    public GameObject Enemy3;
+    public GameObject Enemy4;
 
-    public BirlikOzellik birlik;
+    public BirlikOzellik unit;
     void Start()
     {
-        birlik = transform.gameObject.GetComponent<BirlikOzellik>();
+        unit = transform.gameObject.GetComponent<BirlikOzellik>();
     }
 
-    private float GucHesapla(BirlikOzellik birlik)
+    private float PowerCalculate(BirlikOzellik unit)
     {
-        float Saldiri = birlik.Saldiri;
-        float Savunma = birlik.Savunma;
-        float Sok = birlik.Sok;
-        float Hiz = birlik.Hiz;
-        float Moral = birlik.Moral;
-        float Sayi = birlik.Sayi;
-        float Guc = ((Saldiri * Moral * ((Sayi / 10) + 1)) + (Sok * Hiz)) - (Savunma * Moral * ((Sayi / 10) + 1));
-        return Guc;
+        float Attack = unit.Attack;
+        float Defense = unit.Defense;
+        float Shock = unit.Shock;
+        float Speed = unit.Speed;
+        float Morale = unit.Morale;
+        float Count = unit.Count;
+        float Power = ((Attack * Morale * ((Count / 10) + 1)) + (Shock * Speed)) - (Defense * Morale * ((Count / 10) + 1));
+        return Power;
     }
     void Update()
     {
-        Debug.LogWarning(Sayi);
+        Debug.LogWarning(Count);
         if (Time.frameCount % 85 == 0) // Her 85 frame'de bir çalışır
         {
-            GucHesapla(birlik);
+            PowerCalculate(unit);
         }
-        if (Sayi <= 0)
+        if (Count <= 0)
         {
             Destroy(transform.gameObject);
         }
-        /*if (Moral <= 0)
+        /*if (Morale <= 0)
         {
             if (transform.position.x <= 0 && transform.position.z <= 0)
             {
                 var gidilecek = new Vector3(-500,transform.position.y,-500);
-                transform.position = Vector3.MoveTowards(transform.position, gidilecek, birlik.Hiz * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, gidilecek, unit.Speed * Time.deltaTime);
                 if (transform.position == gidilecek)
                 {
                     Destroy(transform.gameObject);
@@ -67,7 +67,7 @@ public class BirlikOzellik : MonoBehaviour
             else if (transform.position.x <= 0 && transform.position.z >= 0)
             {
                 var gidilecek = new Vector3(-500, transform.position.y, +500);
-                transform.position = Vector3.MoveTowards(transform.position, gidilecek, birlik.Hiz * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, gidilecek, unit.Speed * Time.deltaTime);
                 if (transform.position == gidilecek)
                 {
                     Destroy(transform.gameObject);
@@ -76,7 +76,7 @@ public class BirlikOzellik : MonoBehaviour
             else if (transform.position.x >= 0 && transform.position.z <= 0)
             {
                 var gidilecek = new Vector3(+500, transform.position.y, -500);
-                transform.position = Vector3.MoveTowards(transform.position, gidilecek, birlik.Hiz * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, gidilecek, unit.Speed * Time.deltaTime);
                 if (transform.position == gidilecek)
                 {
                     Destroy(transform.gameObject);
@@ -85,7 +85,7 @@ public class BirlikOzellik : MonoBehaviour
             else if (transform.position.x >= 0 && transform.position.z >= 0)
             {
                 var gidilecek = new Vector3(+500, transform.position.y, +500);
-                transform.position = Vector3.MoveTowards(transform.position, gidilecek, birlik.Hiz * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, gidilecek, unit.Speed * Time.deltaTime);
                 if (transform.position == gidilecek)
                 {
                     Destroy(transform.gameObject);

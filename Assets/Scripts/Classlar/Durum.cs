@@ -4,6 +4,6 @@ using UnityEngine;
 
 public class Durum
 {
-    public Ordu Ordu { get; set; }
-    public int Taraf { get; set; }
+    public Ordu Army { get; set; }
+    public int Side { get; set; }
 }
